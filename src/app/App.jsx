@@ -8,9 +8,6 @@ class App extends Component {
     return (
       <div id="App">
           <main role="main" className="container mt-5">
-              <form className="md-5">
-                  <input type="text"/>
-              </form>
               <RouterOutlet/>
           </main>
       </div>

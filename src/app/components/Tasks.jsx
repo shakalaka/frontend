@@ -4,7 +4,7 @@ import Modal from "react-modal";
 
 const customStyles = {
     content : {
-        top                   : '50%',
+        top                   : '40%',
         left                  : '50%',
         right                 : 'auto',
         bottom                : 'auto',
@@ -42,14 +42,30 @@ class Tasks extends React.Component {
     }
 
     openModal(event) {
+        let id = event.currentTarget.dataset.popup;
+        let cached = localStorage.getItem('data_' + id);
+        let self = this;
         this.setState({ isModalLoading: true });
-        fetch(API + 'task/' + event.currentTarget.dataset.popup)
-            .then(response => response.json())
-            .then(data => this.setState({
-                modalData: data,
+
+        if (!cached) {
+            fetch(API + 'task/' + id)
+                .then(response => response.json())
+                .then(function (data) {
+                    self.setState({
+                        modalData: data,
+                        modalIsOpen: true,
+                        isModalLoading: false
+                    });
+
+                    localStorage.setItem('data_' + id, JSON.stringify(data));
+                });
+        } else {
+            self.setState({
+                modalData: JSON.parse(cached),
                 modalIsOpen: true,
                 isModalLoading: false
-            }));
+            });
+        }
     }
 
     afterOpenModal() {
